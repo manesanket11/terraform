@@ -19,3 +19,4 @@ resource "aws_instance" "web_app" {
 
   tags = merge(var.common_tags, { Name = var.instance_name })
 }
+

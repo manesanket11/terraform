@@ -1,8 +1,12 @@
 # EC2 Instance Terraform Configuration
 
-This Terraform configuration provisions a single EC2 instance and exposes common parameters so you can tailor the instance to your environment.
+This Terraform configuration provisions a single EC2 instance, an open security group, an IAM role with the AmazonSSMManagedInstanceCore policy, and exposes common parameters so you can tailor the instance to your environment.
 
 On first boot the instance installs Apache HTTP Server and hosts a simple page that reads "Hello World - This is using Codex."
+
+The accompanying security group is intentionally permissive, allowing all inbound and outbound traffic (both IPv4 and IPv6) for demonstration purposes. Tighten these rules before promoting to production.
+
+Systems Manager access is enabled via the attached IAM role and instance profile. Remove or replace this attachment if your environment manages SSM permissions differently.
 
 ## Prerequisites
 - Terraform >= 1.5.0

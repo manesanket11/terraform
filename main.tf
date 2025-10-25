@@ -38,20 +38,20 @@ resource "aws_security_group" "allow_all" {
   vpc_id      = data.aws_vpc.default.id
 
   ingress {
-    description = "Allow all inbound traffic"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    description      = "Allow all inbound traffic"
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
 
   egress {
-    description = "Allow all outbound traffic"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    description      = "Allow all outbound traffic"
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
 
@@ -59,9 +59,10 @@ resource "aws_security_group" "allow_all" {
 }
 
 resource "aws_instance" "web_app" {
-  ami           = coalesce(var.ami_id, data.aws_ami.amazon_linux_2.id)
-  instance_type = var.instance_type
+  ami                    = coalesce(var.ami_id, data.aws_ami.amazon_linux_2.id)
+  instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.allow_all.id]
+  iam_instance_profile   = aws_iam_instance_profile.ssm.name
 
   tags = merge(var.common_tags, { Name = var.instance_name })
 

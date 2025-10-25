@@ -13,27 +13,27 @@ jobs:
     name: Terraform Plan and Apply
     runs-on: ubuntu-latest
 
-    # 👇 Make AWS credentials visible to all steps
+    # 👇 Provide AWS credentials to all steps
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
 
     steps:
-      # Step 1: Checkout repository
+      # Step 1: Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Step 2: Setup Terraform
+      # Step 2: Setup Terraform CLI
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.9.7
 
-      # Step 3: Debug AWS environment variables
+      # Step 3: Confirm AWS environment variables
       - name: Debug AWS environment
         run: |
-          echo "Listing AWS environment variables available:"
+          echo "Checking AWS environment variables..."
           env | grep AWS_ || echo "❌ No AWS_* variables found!"
 
       # Step 4: Create AWS credentials file (explicit fallback)
@@ -46,23 +46,3 @@ jobs:
           aws_secret_access_key=$AWS_SECRET_ACCESS_KEY
           region=$AWS_REGION
           EOF
-          echo "✅ AWS credentials file created at ~/.aws/credentials"
-
-      # Step 5: Terraform Init
-      - name: Terraform Init
-        run: terraform init
-
-      # Step 6: Terraform Validate
-      - name: Terraform Validate
-        run: terraform validate
-
-      # Step 7: Terraform Plan
-      - name: Terraform Plan
-        run: terraform plan -input=false
-
-      # Step 8: Terraform Apply (auto-run only on main branch)
-      - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve -input=false
-
-        

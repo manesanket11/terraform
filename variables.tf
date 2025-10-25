@@ -5,9 +5,9 @@ variable "aws_region" {
 }
 
 variable "ami_id" {
-  description = "AMI ID used to launch the EC2 instance."
+  description = "Optional override for the AMI ID used to launch the EC2 instance."
   type        = string
-  default     = "ami-039a49e70ea773ffc"
+  default     = null
 }
 
 variable "instance_type" {
